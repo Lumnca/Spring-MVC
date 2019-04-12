@@ -53,8 +53,64 @@ Web部署描述符web.xml是Java Web应用必不可少的配置文件。在这�
     </servlet-mapping>
 ```
 
+这是一个前端控制器，代表着前台的请求应由谁来处理和应答。默认的是dispatcher，这是一个已经弄好了的控制器。需要修改的是它的` <url-pattern>*.form</url-pattern>`这是请求的域，我们设置为全局，修改为如下：
+
+```xml
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+```
 
 
+接着就是我们dispatcher所对应的应交由什么servlet处理的xml文件修改，在WEB-INF下的dispatcher-servlet.xml中需要加入我们的所对应的控制器处理，到这里我们先写一个控制器代码，在src新建一个名为controller的包，再创建一个名为indexController的类，在里面编辑如下内容：
+
+```java
+package controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+@Controller
+
+public  class indexController{
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    public String printHello(ModelMap model) {
+        model.addAttribute("msg", "Spring MVC Hello World");
+        return "success";
+    }
+}
+```
+
+关于代码解释以后再做介绍，这是一段向前台传输一段文字的方法，msg内容为Spring MVC Hello World。然后编辑上面所说的dispatcher-servlet.xml文件：
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <context:component-scan base-package="controller"/>
+
+    <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    <mvc:default-servlet-handler/>
+
+    <mvc:annotation-driven/>
+</beans>
+```
+
+如上面全部配置，若只换主体标签则不能使用其他标签，所以全换。其中对于各个标签的介绍如下：
+
+```
+<context:component-scan base-package="controller"/>    --- 控制器所在的类/包
+```
 
 
 
