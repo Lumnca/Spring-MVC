@@ -9,6 +9,7 @@
 
 项目命名后再点击finsh,可以看到下载进度，完成后打开项目文件夹如下：
 
+![](https://github.com/Lumnca/Spring-MVC/blob/master/img/a2.png)
 
 第一步要做的就是打开web.xml文件，查看配置信息：
 
@@ -74,12 +75,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-
-public  class indexController{
-    @RequestMapping(value = "/index", method = RequestMethod.GET)
-    public String printHello(ModelMap model) {
-        model.addAttribute("msg", "Spring MVC Hello World");
-        return "success";
+public class indexController {
+    @RequestMapping(value = "/index",method = RequestMethod.GET)
+    public String Hello(ModelMap model){
+        model.addAttribute("messgae","Hello World!");
+        return "hello";
     }
 }
 ```
@@ -108,9 +108,35 @@ public  class indexController{
 
 如上面全部配置，若只换主体标签则不能使用其他标签，所以全换。其中对于各个标签的介绍如下：
 
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+<context:component-scan base-package="controller"/>
+
+<!-- 只把动态信息当做controller处理，忽略静态信息 -->
+<mvc:default-servlet-handler/>
+
+<!-- 开启注解 -->
+<mvc:annotation-driven/>
+
+<!--ViewResolver 视图解析器-->
+<!--用于支持Servlet、JSP视图解析-->
+<bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+    <property name="prefix" value="/WEB-INF/jsp/"/>           
+    <property name="suffix" value=".jsp"/>
+</bean>
+</beans>
 ```
-<context:component-scan base-package="controller"/>    --- 控制器所在的类/包
-```
+
+至此配置完毕，但是需要在WEB-INF下创建一个lib文件夹，并把外层的lib文件夹中的内容复制到其中，因为web项目运行需要包，但是默认的包还差了两个，即jstl.jar与standard.jsr。把这两个也一起添加进去，如果不行，则直接添加到out文件的web下的lib文件中。配置tomcat运行即可看到。如下是我的文件目录：
+
+
 
 
 
