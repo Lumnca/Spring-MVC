@@ -136,7 +136,7 @@ public class indexController {
 
 至此配置完毕，但是需要在WEB-INF下创建一个lib文件夹，并把外层的lib文件夹中的内容复制到其中，因为web项目运行需要包，但是默认的包还差了两个，即jstl.jar与standard.jsr。把这两个也一起添加进去，如果不行，则直接添加到out文件的web下的lib文件中。配置tomcat运行即可看到。如下是我的文件目录：
 
-
+![](https://github.com/Lumnca/Spring-MVC/blob/master/img/a3.png)
 
 
 
