@@ -187,11 +187,10 @@ public class IndexController implements Controller {
  
  ```
  <h4>${message}</h4>
-  <form action="a">
+  <form action="success">
     <input type="submit" value="转到">
   </form>
 ```
 
-
-运行点击即可运行。
+由于我们的表单action为success，所以点击即可执行控制器。
 
