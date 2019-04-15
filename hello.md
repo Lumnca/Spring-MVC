@@ -138,6 +138,60 @@ public class indexController {
 
 ![](https://github.com/Lumnca/Spring-MVC/blob/master/img/a3.png)
 
+上面是基于注解配置，也可以使用Controller接口完成，下面简单列出实现过程：
+
+web.xml文件一样，不做多的修改。和注解的一样。主要是dispatcher-servlet.xml的修改：
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+        <bean name="a" class="controller.IndexController"></bean>
+        <bean id="simpleUrlHandlerMapping"
+              class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+            <property name="mappings">
+                <props>
+                    <prop key="/success">a</prop>
+                </props>
+            </property>
+        </bean>
+</beans>
+```
+
+` <bean name="a" class="controller.IndexController"></bean>`定义了一个控制器类并指定到controller.IndexController，其名称为a。下面则是处理请求
+发送请求所需要分配的控制器，`<prop key="/success">a</prop>`代表着请求为/success时所要交给的控制器名称的是a。a即是上面我们所定义的控制器名称。
+
+接下来编写控制器类容：
+
+```java
+package controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.Controller;
+
+public class IndexController implements Controller {
+	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		ModelAndView mav = new ModelAndView("index.jsp");
+		mav.addObject("message", "Hello Spring MVC");
+		return mav;
+	}
+}
+```
+ handleRequest(HttpServletRequest request, HttpServletResponse response)方法是接口中必须实现的方法，所以方法名不能做修改，并且参数也要为这个。
+ ModelAndView（）构造方法接受一个字符串的参数，代表转到的路径。代表的一个视图的实例化。最后在index.jsp添加显示信息即可：
+ 
+ ```
+ <h4>${message}</h4>
+  <form action="a">
+    <input type="submit" value="转到">
+  </form>
+```
 
 
+运行点击即可运行。
 
