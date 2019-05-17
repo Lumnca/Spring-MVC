@@ -14,3 +14,5 @@ Spring MVC框架学习，使用IDEA开发
 :maple_leaf:[验证器](https://github.com/Lumnca/Spring-MVC/blob/master/%E9%AA%8C%E8%AF%81%E5%99%A8.md)
 
 :maple_leaf:[上传文件](https://github.com/Lumnca/Spring-MVC/blob/master/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6.md)
+
+:maple_leaf:[下载文件](https://github.com/Lumnca/Spring-MVC/blob/master/%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6.md)
