@@ -70,7 +70,7 @@ public class BookSericeImpl implements BookService {
 
 这样做的好处是什么？其实就是为了**解耦** Spring和IOC有什么关系呢？其实Spring就是实现了IOC
 
-## Spring技术对IOC思想进行了实现 ##
+**Spring技术对IOC思想进行了实现**
 
 * Spring提供了一个容器，称为IOC容器，用来充当Ioc思想中的外部。
 
