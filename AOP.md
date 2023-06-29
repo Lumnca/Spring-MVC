@@ -114,8 +114,8 @@ public class Advice {
 ```java
 public class Advice {
     //切入点
-    @Pointcut(value = "execution(void org.example.service.BookDaoImpl.add())")
-    public void pt(){}
+    @Pointcut("execution(* org.example.dao.BookDao.*(..))")
+    private void pt(){}
 
     //在哪里执行，切面
     @Before("pt()")
@@ -131,17 +131,70 @@ public class Advice {
 @Component
 @Aspect
 public class Advice {
-    //切入点
-    @Pointcut(value = "execution(void org.example.service.BookDaoImpl.add())")
-    public void pt(){}
 
-    //在哪里执行，切面
+    @Pointcut("execution(* org.example.dao.BookDao.*(..))")
+    private void pt(){}
+
     @Before("pt()")
     public void record(){
         System.out.println("This is a record messgae");
     }
 }
+
 ```
 
 在Spring配置类或者启动类位置上加入`@EnableAspectJAutoProxy`注解
+
+```java
+@Configuration
+@ComponentScan("org.example")
+@EnableAspectJAutoProxy
+public class SpringConfig {
+
+}
+```
+
+在BookDao的实现类上标记为Bean：
+
+```java
+@Service
+public class BookDaoImpl implements BookDao {
+    @Override
+    public void save() {
+        System.out.println("Save Book ...");
+    }
+    @Override
+    public void add() {
+        System.out.println("2023/6/28 XXX add ...");
+    }
+    @Override
+    public void remove() {
+        System.out.println("2023/6/28 XXX remove ...");
+    }
+    @Override
+    public void update() {
+        System.out.println("2023/6/28 XXX update ...");
+    }
+}
+```
+最后调用查看结果：
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfig.class);
+        BookDao bookDao = ctx.getBean(BookDao.class);
+        bookDao.add();
+    }
+}
+```
+
+输出以下内容说明配置成功！
+
+```
+This is a record messgae
+2023/6/28 XXX add ...
+```
+
+
 
