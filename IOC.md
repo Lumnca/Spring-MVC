@@ -6,6 +6,8 @@
 
 ### 3.Bean
 
+### 4.注解开发
+
 ***
 
 ## 核心概念
@@ -465,4 +467,122 @@ public class BookFactory implements InitializingBean, DisposableBean {
 * 使用按类型装配时候必须保障容器中相同类型bean唯一
 * 按名称装配时候必须保证容器中具有指定属性名称的bean，因为变量名与配置耦合，不推荐使用。
 * 自动配置优先级低于setter注入与构造器注入，同时出现自动装配失效。
+
+
+## 注解开发
+
+对于前面的操作开发，均需要在配置文件配置，使用起来还是不够方便，Spring提供了注解开发，我们可以使用启动配置类来替换配置文件
+
+```java
+@Configuration
+@ComponentScan("org.example")
+public class SpringConfig {
+
+}
+```
+
+对于原来的Bean配置只需要在原始的类上加上`@Component`注解即可表示向容器中注册一个Bean。
+
+```java
+@Component
+public class BookDaoImpl implements BookDao {
+    @Override
+    public void save() {
+        System.out.println("Save Book ...");
+    }
+}
+```
+
+对于修改Bean为多例可以在类的前面写上`@Scope("prototype")`注解。
+
+对于依赖注入可以使用`@Autowired`注解注入对象，@Value注入值类型：
+
+```java
+@Service
+public class BookSericeImpl implements BookService {
+
+    @Autowired
+    BookDaoImpl bookDao;
+
+    @Value("4")
+    private int id;
+    
+    @Value("aaa")
+    private String name;
+
+    @Override
+    public String show() {
+        bookDao.save();
+        return "Book Name is "+name+" Id:"+id;
+    }
+}
+
+```
+
+注意为了区分Bean类型还提供了以下三个注解都和`@Component`一样的作用只是用来区分功能：
+
+`@Controller` Web应用程序控制器
+`@Service` 处理业务逻辑和实现各种操作
+`@Repository` 数据访问的组件，通常与数据库交互。
+
+最后修改读取文件为启动类即可：
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfig.class);
+        BookSericeImpl bookSerice = ctx.getBean(BookSericeImpl.class);
+        bookSerice.show();
+
+    }
+}
+```
+
+配置文件值读入值注入：可以通过注解`@PropertySource("jdbc.properties")来读取配置文件，多个使用{"xx","xxx"}引用。在需要注入的地方使用$
+
+配置文件jdbc.properties:
+
+```
+id=6
+name=bbb
+```
+
+加入配置文件
+
+``java
+@Configuration
+@ComponentScan("org.example")
+@PropertySource({"jdbc.properties"})
+public class SpringConfig {
+
+}
+```
+
+配置文件注入：
+
+```java
+@Service
+public class BookSericeImpl implements BookService {
+
+    @Autowired
+    BookDaoImpl bookDao;
+
+    @Value("${id}")
+    private int id;
+    @Value("${name}")
+    private String name;
+
+    @Override
+    public String show() {
+        bookDao.save();
+        return "Book Name is "+name+" Id:"+id;
+    }
+}
+
+```
+
+
+
+
+
 
