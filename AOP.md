@@ -27,6 +27,45 @@ public class BookDaoImpl implements BookDao {
 ```
 
 可见每加入一个操作都要加一句打印语句，如果现在要修改打印语句内容，则需要对所有的打印语句进行修改，稍微显得麻烦。如果我们能够让程序知道调用哪些方法都需要做个记录，我们只需要写一个共同的方法让程序在调用这些方法的时候，再调用共同的方法，那就可以可以解决我们的问题了。
+在以前的学习中我们可以用委托的方式来完成这个过程，如下:
+
+```java
+// 定义一个任务接口
+interface Task {
+    void execute();
+}
+
+// 实现具体的任务
+class TaskImpl implements Task {
+    @Override
+    public void execute() {
+        System.out.println("执行具体任务");
+    }
+}
+
+// 委托方对象
+class Delegator {
+    private Task task;
+
+    public Delegator(Task task) {
+        this.task = task;
+    }
+
+    public void doTask() {
+        task.execute();
+    }
+}
+
+// 使用委托模式
+public class Main {
+    public static void main(String[] args) {
+        Task task = new TaskImpl(); // 创建具体的任务对象
+        Delegator delegator = new Delegator(task); // 创建委托方对象，并将任务委托给具体的任务对象
+        delegator.doTask(); // 委托方对象执行任务
+    }
+}
+
+```
 
 ### AOP案例
 
