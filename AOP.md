@@ -125,6 +125,11 @@ public class Advice {
 }
 ```
 
+对于表达式匹配方式为 : `动作关键字(访问修饰符  返回值 包名.类/接口名.方法名(参数)异常名)`
+
+`*` : 表示匹配任何  `BookDao.*` BookDao接口下的任意方法
+`..` : 表示多个连续的任意符号 `BookDao.*(..)` BookDao接口下的任意方法随便多少个参数
+
 需要让Spring知道这是AOP通知类
 
 ```java
@@ -140,8 +145,9 @@ public class Advice {
         System.out.println("This is a record messgae");
     }
 }
-
 ```
+
+
 
 在Spring配置类或者启动类位置上加入`@EnableAspectJAutoProxy`注解
 
