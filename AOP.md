@@ -67,6 +67,81 @@ public class Main {
 
 ```
 
+当然对于Spring来说已经帮我们实现了这个流程，我们不用自己去实现，而实现这个过程的方法就是AOP
+
+### AOP结构
+
+AOP（面向切面编程）的结构包括以下几个核心组件：
+
+* 1. 连接点（Join Point）：连接点是在应用程序执行期间可以插入切面的特定点。例如，方法调用是一个连接点，可以在该连接点处应用切面。在SpringAOP中可以理解为方法执行 （可以插入方法的地方）。
+  
+* 2. 切点（Pointcut）：切点是在应用程序中选择连接点的表达式。连接点表示在应用程序中可以插入切面的位置，如方法调用、方法执行、异常抛出等。切点通过表达式语言定义，以确定哪些连接点适用于给定的切面 （哪些地方需要插入方法）。
+
+* 3. 通知（Advice）：通知定义了在切点处执行的具体操作(共同操作)。它是在切点周围织入的代码，用于实现横切关注点的行为。常见的通知类型包括前置通知（Before）、后置通知（After）、返回通知（After-returning）、异常通知（After-throwing）和环绕通知（Around）（插入的共同方法）。
+
+* 4. 切面（Aspect）：切面是关注点的模块化。它定义了与特定关注点相关的行为。切面由切点和通知组成。切点指定在应用程序中哪些位置应该应用通知，而通知定义了在切点处执行的特定行为。
+
+
 ### AOP案例
 
+导入jar包:
+
+```xml
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.9.4</version>
+        </dependency>
+```
+
+定义通知类（共性功能）
+
+```java
+public class Advice {
+    
+    public void record(){
+        System.out.println("This is a record messgae");
+    }
+}
+```
+
+定义切入点:
+
+```java
+public class Advice {
+    //切入点
+    @Pointcut(value = "execution(void org.example.service.BookDaoImpl.add())")
+    public void pt(){}
+
+    //在哪里执行，切面
+    @Before("pt()")
+    public void record(){
+        System.out.println("This is a record messgae");
+    }
+}
+```
+
+需要让Spring知道这是AOP通知类
+
+```java
+@Component
+@Aspect
+public class Advice {
+    //切入点
+    @Pointcut(value = "execution(void org.example.service.BookDaoImpl.add())")
+    public void pt(){}
+
+    //在哪里执行，切面
+    @Before("pt()")
+    public void record(){
+        System.out.println("This is a record messgae");
+    }
+}
+```
+
+在Spring配置类或者启动类位置上加入`@EnableAspectJAutoProxy`注解
 
