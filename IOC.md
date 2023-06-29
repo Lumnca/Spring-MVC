@@ -549,7 +549,7 @@ name=bbb
 
 加入配置文件
 
-``java
+```java
 @Configuration
 @ComponentScan("org.example")
 @PropertySource({"jdbc.properties"})
