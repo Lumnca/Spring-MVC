@@ -1,4 +1,4 @@
-# :maple_leaf: Spring mvc创建项目
+# :maple_leaf: Spring mvc集成Web项目
 
 我们使用IDEA创建一个Spring Mvc项目，首先打开我们的编译器创建工程页：
 
@@ -194,3 +194,132 @@ public class IndexController implements Controller {
 
 由于我们的表单action为success，所以点击即可执行控制器。
 
+****
+
+上面是针对于以前传统得JSP,Servlet的创建，现在我们使用少代码化的SpringMVC创建：
+
+同样一开始创建maven项目，选择你的jdk版本和web初始包。注意不同jdk版本要求不一样可在网上查询到相关资料：
+
+首先要修改的pom.xml文件，加入mvc和spring相关包
+
+```xml
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.example</groupId>
+  <artifactId>MVC</artifactId>
+
+  <version>1.0-SNAPSHOT</version>
+  <name>MVC Maven Webapp</name>
+  <packaging>war</packaging>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>5.3.23</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.1.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+      <version>5.2.9.RELEASE</version>
+    </dependency>
+  </dependencies>
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.tomcat.maven</groupId>
+        <artifactId>tomcat7-maven-plugin</artifactId>
+        <version>2.1</version>
+        <configuration>
+          <port>80</port>
+          <path>/</path>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
+```
+
+然后编写Spring启动配置类:
+
+```java
+@Configuration
+@ComponentScan("org.example")
+public class SpringMvcConfig {
+}
+```
+
+要想运行tomcat加载我们的spring配置类还需要编写加载配置：
+
+```java
+public class InitConfig extends AbstractDispatcherServletInitializer {
+	//加载SpringMVC容器的配置
+    @Override
+    protected WebApplicationContext createServletApplicationContext() {
+        AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+        context.register(SpringMvcConfig.class);
+        return context;
+    }
+	//哪些路径交给MVC容器处理
+    @Override
+    protected String[] getServletMappings() {
+        return new String[]{"/"};
+    }
+	//加载Spring配置
+    @Override
+    protected WebApplicationContext createRootApplicationContext() {
+        return null;
+    }
+}
+```
+
+最后编写控制器接口，业务类：
+
+```java
+@Service
+public class BookServiceImpl {
+    public void buyBook(){
+        System.out.println("buy book...");
+    }
+}
+
+
+@Controller
+public class BookController {
+    @Autowired
+    BookServiceImpl bookService;
+
+    @RequestMapping("/buy")
+    @ResponseBody
+    public String buyBook(){
+        bookService.buyBook();
+        return "123456";
+    }
+}
+```
+
+最后在编译器启动设置哪里选择maven，命令行启动如下
+
+![](https://github.com/Lumnca/Spring-MVC/blob/master/img/1111.png)
+
+最后在浏览器输入`http://localhost/buy` 看到输出123456说明创建成功~
