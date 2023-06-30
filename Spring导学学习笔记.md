@@ -1,16 +1,5 @@
-# Spring导学
+# Spring开始
 
-## 课程大纲
-
-1. Spring概览
-2. SpringIOC
-3. Spring集成Web项目
-4. SpringMVC
-5. SpringAOP
-6. Mybatis
-7. SSM整合
-8. 其他插件的整合
-   1. Spring整合Junit（单元测试）
 
 ## Spring是什么？
 
@@ -72,7 +61,7 @@ Spring对JavaEE API（如JDBC、JavaMail、远程调用等）进行了薄薄的�
 
 ## Spring体系结构
 
-<img src=".\imgs\Spring体系结构图.png" style="zoom:50%;" />
+<img src=".\img\Spring体系结构图.png" style="zoom:50%;" />
 
 ### Core Container ⭐⭐⭐⭐⭐
 
