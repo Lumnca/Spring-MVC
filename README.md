@@ -13,7 +13,7 @@ SpringMVC已经成为目前最主流的MVC框架之一，并且随着Spring3.0�
 
 ## SpringMVC组件解析⭐⭐⭐⭐⭐
 
-![](.\imgs\SpringMVC组件解析流程.png)
+![](./img/SpringMVC%E7%BB%84%E4%BB%B6%E8%A7%A3%E6%9E%90%E6%B5%81%E7%A8%8B.png)
 
 SpringMVC 的执行流程
 
@@ -27,6 +27,8 @@ SpringMVC 的执行流程
 8. DispatcherServlet将ModelAndView传给ViewReslover视图解析器
 9. ViewReslover解析后返回具体View
 10. DispatcherServlet根据View进行渲染视图（即将模型数据填充至视图中），DispatcherServlet响应用户
+
+***
 
 :maple_leaf: [Spring 介绍](https://github.com/Lumnca/Spring-MVC/blob/master/Spring%E5%AF%BC%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.md)
 
